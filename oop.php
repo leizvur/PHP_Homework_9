@@ -54,14 +54,15 @@ class ClassCar
 		$this->package=$package;
 		$this->transmission=$transmission;
 		$this->region=$region;
-		if (!empty($region) && $region="Russia") 
+
+		if ($this->region=="Russia") 
 		{
 			
-			echo "Продажи ограничены!" . "Доступна комплектация: " . $package . " с коробкой передач: " . $transmission;
+			echo "Продажи ограничены!" . "Доступна комплектация: " . $this->package . " с коробкой передач: " . $this->transmission . ".";
 
 
 		} 
-		elseif (!empty($region) && $region="USA")  
+		elseif ($this->region=="USA")  
 		{
 			echo "Доступен широкий выбор моделей! Позвоните нам для получения дополнительной информации.";
 		}
@@ -73,11 +74,13 @@ class ClassCar
 
 }
 ?>
-<h2>Тачки</h2>
+
+
+
+<h2>Машины</h2>
 <?php 
 $carToyota=new ClassCar("Toyota Avensis", "Russia", 1200000);
 $carToyota->currency="RUR";
-$carToyota->region="Russia";
 $carToyota->transmission="Manual";
 $carToyota->package="Sol";
  ?>
@@ -91,7 +94,6 @@ $carToyota->package="Sol";
 <?php 
 $carBMW=new ClassCar("BMW X5", "USA", 300000);
 $carBMW->currency="USD";
-$carBMW->region="USA";
  ?>
 <ul>
 	<li><?php print_r("Название модели: " . $carBMW->name);?></li>
@@ -101,7 +103,9 @@ $carBMW->region="USA";
 </ul>
 
 
-<h2>Телеки</h2>
+
+
+<h2>Телевизоры</h2>
 <?php 
 
 class ClassTV
@@ -112,46 +116,49 @@ class ClassTV
 	public $dataformat;
 	public $price; 
 	
-	public function getSurPrise($price, $lighing)
-	{
-		$this->price=$price;
-		if ($lighting=1) 
-		{
-			return $price;
-		}
-		
-		if ($lighting=0) 
-		{
-			
-			echo "Подарите это барахло клиентам! Разгрузите склад!"; 
-		}
-	}
-
-	public function __construct($model, $diagonal, $dataformat)
+		public function __construct($model, $diagonal, $dataformat, $lighting)
 	{
 		$this->model=$model;
 		$this->diagonal=$diagonal;
 		$this->dataformat=$dataformat;
+		$this->lighting=$lighting;
 		echo "<pre>";
-		print_r ("На склад доставлены модели телевизоров " . $model . " диагональю " . $diagonal . ". Формат: "  . $dataformat);
+		print_r ("На склад доставлены модели телевизоров " . $this->model . " диагональю " . $this->diagonal . ". Формат: "  . $this->dataformat);
 		echo "</pre>";
 	}
+
+	public function getSurPrise($price, $lighting)
+	{
+		$this->price=$price;
+		$this->lighting=$lighting;
+		if ($this->lighting==true) 
+		{
+			return $this->price;
+		}
+		
+		if ($this->lighting==false) 
+		{
+			return $this->price . " Подарите это барахло клиентам! Разгрузите склад!"; 
+		}
+	}
+
 }
 
-$tvDigital=new ClassTV("iDaTV", "200", "4K");
-$tvDigital->lighting=1;
+$tvDigital=new ClassTV("iDaTV", "200", "4K", true);
 echo "<pre>";
-print_r("Стоимость: " . $tvDigital->getSurPrise(120, 1));
+print_r("Стоимость: " . $tvDigital->getSurPrise(120, true));
 echo "</pre>";
 
 
-$tvAnalog=new ClassTV("NeDoTV", "100", "ЭраДоHD");
-$tvAnalog->lighting=0;
+$tvAnalog=new ClassTV("NeDoTV", "100", "ЭраДоHD", false);
 echo "<pre>";
-print_r("Стоимость: " . $tvAnalog->getSurPrise(10, 0));
+print_r("Стоимость: " . $tvAnalog->getSurPrise(10, false));
 echo "</pre>";
-
 ?>
+
+
+
+
 <h2>Ручки</h2>
 
 <?php 
@@ -168,10 +175,10 @@ echo "</pre>";
  		$this->color=$color;
  		$this->audience=$audience;
  		echo "<pre>";
- 		print_r("Новые позиции на складе: " . $color . " ручки в количестве " . $amount . " штук.");
+ 		print_r("Новые позиции на складе: " . $this->color . " ручки в количестве " . $this->amount . " штук.");
  		echo "<pre>";
  		echo "</pre>";
- 		print_r($audience . " ждут новые " . $color . " ручки как можно скорее.");
+ 		print_r($this->audience . " ждут новые " . $this->color . " ручки как можно скорее.");
  		echo "</pre>";
  	}
  }
@@ -179,6 +186,9 @@ echo "</pre>";
 $penSchool=new ClassPen("синие", "Школьники", 100);
 $penBusiness=new ClassPen("черные", "Менеджеры", 200);
 ?>
+
+
+
 <h2>Утки</h2>
 
 <?php
@@ -190,18 +200,23 @@ class ClassDuck
 
 	public function __construct($food, $sex)
 	{
-		
+		$this->food=$food;
+		$this->sex=$sex;
 	}
 
 	public function methodChild()
 	{
-		if ($this->sex="boy") 
+		if ($this->sex=="girl") 
 		{
-			echo "Покорми уток-девочек хлебом";
+			echo "<pre>";
+			return "Покорми уток-девочек хлебом";
+			echo "</pre>";
 		}
-		elseif ($this->sex="boy") 
+		elseif ($this->sex=="boy") 
 		{
-			echo "Покорми уток-мальчиков зерном";
+			echo "<pre>";
+			return "Покорми уток-мальчиков зерном";
+			echo "</pre>";
 		}
 	}
 }
@@ -215,6 +230,9 @@ echo $duckHome->methodChild();
 $duckWild=new ClassDuck("corn", "boy");
 echo $duckWild->methodChild();
 ?>
+
+
+
 <h2>Товар</h2>
 <?php 
 
@@ -228,6 +246,11 @@ class ClassProduct
 
 	public function __construct($id, $type, $name, $category, $price)
 	{
+		$this->id=$id;
+		$this->type=$type;
+		$this->name=$name;
+		$this->category=$category;
+
 		echo "<pre>";
 		print_r("Поступил новый товар.");
 		echo "</pre>";
@@ -235,17 +258,13 @@ class ClassProduct
 	
 	public function methodSort()
 	{
-		$this->type=$type;
-		$this->name=$name;
-		$this->category=$category;
-
 		if ($this->type=="еда") 
 		{
-			echo "Положить товар " . $name . " в холодильник!";
+			return "Положить товар " . $this->name . " в холодильник!";
 		}
 		elseif ($this->type=="ПО") 
 		{
-			echo "Разместить товар " . $name . " на складе в категории " . $category;
+			return "Разместить товар " . $this->name . " на складе в категории " . $this->category;
 		}
 	}
 	
@@ -259,9 +278,6 @@ echo $productSoft->methodSort();
 
 $productFood1=new ClassProduct(3, "еда", "кабачки", "бахчевые", 85);
 echo $productFood1->methodSort();
-
-
-
 
 ?>
 
